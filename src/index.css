@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+/* 
+  TAILWIND THEME TOKENS 
+*/
+
+:root {
+    /* Core Colors */
+    --color-primary: 79 70 229;
+    --color-secondary: 55 65 81;
+    --color-success: 21 128 61;
+    --color-warning: 194 65 12;
+    --color-danger: 220 38 38;
+    --color-info: 14 116 144;
+
+    /* Backgrounds */
+    --color-surface: 255 255 255;
+    --color-background: 243 244 246;
+
+    /* Text */
+    --color-on-surface: 17 24 39;
+    --color-on-primary: 255 255 255;
+
+    /* Borders */
+    --color-border: 209 213 219;
+}
+
+@theme {
+    --color-primary: rgb(var(--color-primary));
+    --color-secondary: rgb(var(--color-secondary));
+    --color-success: rgb(var(--color-success));
+    --color-warning: rgb(var(--color-warning));
+    --color-danger: rgb(var(--color-danger));
+    --color-info: rgb(var(--color-info));
+
+    --color-surface: rgb(var(--color-surface));
+    --color-background: rgb(var(--color-background));
+
+    --color-on-surface: rgb(var(--color-on-surface));
+    --color-on-primary: rgb(var(--color-on-primary));
+
+    --color-border: rgb(var(--color-border));
+}
+
+/* AI Icon Class */
+.e-icons.e-ai-sparkle::before {
+    content: "✨";
+    font-size: 1.2em;
+}
+
+/* Drawer Styling Overrides */
+#chat-drawer.e-sidebar,
+#chat-drawer.e-sidebar .e-content-animation,
+#chat-drawer.e-sidebar .e-sidebar-content,
+#chat-drawer.e-sidebar>div {
+    background-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+
+
+#chat-drawer-content {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border-top-left-radius: 24px;
+    border-bottom-left-radius: 24px;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    border-left: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Base Styles */
+body {
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-on-surface));
+}

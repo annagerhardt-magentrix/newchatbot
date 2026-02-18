@@ -1,0 +1,94 @@
+/* 
+  TAILWIND THEME TOKENS 
+  Converted from your JSON file.
+*/
+
+:root {
+  /* Core Colors */
+  --color-primary: 79, 70, 229;
+  /* $primary */
+  --color-secondary: 55, 65, 81;
+  /* $secondary */
+  --color-success: 21, 128, 61;
+  /* $success */
+  --color-warning: 194, 65, 12;
+  /* $warning */
+  --color-danger: 220, 38, 38;
+  /* $danger */
+  --color-info: 14, 116, 144;
+  /* $info */
+
+  /* Backgrounds */
+  --color-surface: 255, 255, 255;
+  /* $content-bg-color */
+  --color-background: 243, 244, 246;
+  /* $cool-gray-100 / logical background */
+
+  /* Text */
+  --color-on-surface: 17, 24, 39;
+  /* $content-text-color */
+  --color-on-primary: 255, 255, 255;
+  /* $primary-text-color */
+
+  /* Borders */
+  --color-border: 209, 213, 219;
+  /* $border */
+}
+
+/* 
+  Tailwind v4 Theme Extension
+  This makes these variables available as utility classes like bg-primary, text-danger etc.
+*/
+@theme {
+  --color-primary: rgb(var(--color-primary));
+  --color-secondary: rgb(var(--color-secondary));
+  --color-success: rgb(var(--color-success));
+  --color-warning: rgb(var(--color-warning));
+  --color-danger: rgb(var(--color-danger));
+  --color-info: rgb(var(--color-info));
+
+  --color-surface: rgb(var(--color-surface));
+  --color-background: rgb(var(--color-background));
+
+  --color-on-surface: rgb(var(--color-on-surface));
+  --color-on-primary: rgb(var(--color-on-primary));
+
+  --color-border: rgb(var(--color-border));
+}
+
+/* 
+  Syncfusion Tailwind Theme Overrides 
+  The Syncfusion Tailwind theme uses specific hex values by default. 
+  We override key classes to use our variables.
+*/
+
+/* Buttons */
+.e-btn.e-primary,
+.e-css.e-btn.e-primary {
+  background-color: rgb(var(--color-primary)) !important;
+  border-color: rgb(var(--color-primary)) !important;
+  color: rgb(var(--color-on-primary)) !important;
+}
+
+.e-btn.e-success,
+.e-css.e-btn.e-success {
+  background-color: rgb(var(--color-success)) !important;
+  border-color: rgb(var(--color-success)) !important;
+}
+
+/* Grid Header */
+.e-grid .e-headercell {
+  background-color: rgb(var(--color-background)) !important;
+  color: rgb(var(--color-on-surface)) !important;
+}
+
+/* Sidebar */
+.e-sidebar {
+  background-color: rgb(var(--color-surface)) !important;
+  border-right-color: rgb(var(--color-border)) !important;
+}
+
+/* Calendar Selected Date */
+.e-calendar .e-content td.e-selected span.e-day {
+  background-color: rgb(var(--color-primary)) !important;
+}
