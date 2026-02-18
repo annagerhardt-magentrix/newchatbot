@@ -42,10 +42,26 @@
     --color-border: rgb(var(--color-border));
 }
 
-/* AI Icon Class */
+/* AI Icon Class - Flat Minimalist Sparkle */
+.e-icons.e-ai-sparkle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    height: 1em;
+}
+
 .e-icons.e-ai-sparkle::before {
-    content: "✨";
-    font-size: 1.2em;
+    content: "";
+    display: block;
+    width: 0.9em;
+    height: 0.9em;
+    background-color: currentColor;
+    /* Minimalist flat sparkle path */
+    mask: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4L12 2z'/%3E%3C/svg%3E") no-repeat center;
+    mask-size: contain;
+    -webkit-mask: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4L12 2z'/%3E%3C/svg%3E") no-repeat center;
+    -webkit-mask-size: contain;
 }
 
 /* Drawer Styling Overrides */

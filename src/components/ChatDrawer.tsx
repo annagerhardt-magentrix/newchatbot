@@ -94,37 +94,28 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                     {/* Right Panel: Chat */}
                     <div className="flex-1 flex flex-col bg-white/80">
                         {/* Messages Area */}
-                        <div className="flex-1 overflow-y-auto p-8 flex flex-col gap-6">
-                            {/* Initial Bot Greeting */}
-                            <div className="flex gap-4">
-                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex-shrink-0 flex items-center justify-center text-white shadow-md">
-                                    <span className="e-icons e-ai-sparkle"></span>
-                                </div>
-                                <div className="flex-1 max-w-2xl">
-                                    <div className="font-bold text-sm text-gray-900 mb-1">Magentrix Wizard</div>
-                                    <div className="text-gray-700 bg-gray-50 p-4 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 leading-relaxed">
-                                        Hello! I'm here to help you log work, search the wiki, or manage your account. How can I assist you today?
-                                    </div>
-                                </div>
-                            </div>
-
-                            {messages.map((msg, idx) => (
+                        <div className="flex-1 overflow-y-auto p-4 md:p-6 flex flex-col gap-4">
+                            {/* Consolidated message list including initial greeting */}
+                            {[
+                                { sender: 'user', text: "Can you help me log my work for today?" },
+                                ...messages
+                            ].map((msg, idx) => (
                                 <div key={idx} className={`flex w-full ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                    <div className={`flex gap-4 max-w-[80%] ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                                        {/* Avatar */}
-                                        <div className={`w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-white shadow-md ${msg.sender === 'bot' ? 'bg-gradient-to-br from-indigo-500 to-purple-600' : 'bg-gray-800'}`}>
+                                    <div className={`flex gap-3 max-w-[75%] ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                                        {/* Avatar - Slightly smaller for better scale */}
+                                        <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-white shadow-sm text-xs ${msg.sender === 'bot' ? 'bg-gradient-to-br from-indigo-500 to-purple-600' : 'bg-gray-800'}`}>
                                             {msg.sender === 'bot' ? <span className="e-icons e-ai-sparkle"></span> : 'U'}
                                         </div>
 
                                         {/* Content */}
-                                        <div className={`flex-1 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
-                                            <div className="font-bold text-sm text-gray-900 mb-1">
+                                        <div className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
+                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tight mb-1 px-1">
                                                 {msg.sender === 'bot' ? 'Magentrix Wizard' : 'You'}
-                                            </div>
-                                            <div className={`inline-block p-4 rounded-2xl shadow-sm border ${msg.sender === 'bot'
-                                                ? 'bg-gray-50 border-gray-100 rounded-tl-none text-gray-700'
-                                                : 'bg-indigo-600 border-indigo-600 rounded-tr-none text-white'
-                                                } text-left leading-relaxed`}>
+                                            </span>
+                                            <div className={`w-fit px-4 py-2 rounded-2xl shadow-sm text-sm border ${msg.sender === 'bot'
+                                                ? 'bg-white border-gray-100 rounded-tl-none text-gray-700 text-left'
+                                                : 'bg-indigo-600 border-indigo-600 rounded-tr-none text-white text-right'
+                                                } leading-relaxed`}>
                                                 {msg.text}
                                             </div>
                                         </div>
@@ -133,27 +124,75 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                             ))}
                         </div>
 
-                        {/* Input Area */}
-                        <div className="p-6 bg-white border-t border-gray-100">
-                            <div className="relative flex items-center gap-3 bg-gray-50 p-2 rounded-2xl border border-gray-200 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-100 transition-all shadow-inner">
-                                <div className="flex-1">
+                        {/* Simplified Input Area */}
+                        <div className="p-4 bg-white border-t border-gray-100">
+                            <div className="flex items-end gap-2">
+                                {/* File Upload Button & Hidden Input */}
+                                <input
+                                    type="file"
+                                    id="chat-file-upload"
+                                    className="hidden"
+                                    accept="image/*,.pdf,.xlsx,.xls,.csv"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            setMessages(prev => [...prev, {
+                                                sender: 'user',
+                                                text: `Uploaded file: ${file.name}`
+                                            }]);
+                                        }
+                                    }}
+                                />
+                                <ButtonComponent
+                                    cssClass="e-flat e-round"
+                                    style={{
+                                        width: '40px',
+                                        height: '40px',
+                                        minWidth: '40px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        color: '#6b7280'
+                                    }}
+                                    iconCss="e-icons e-attachment"
+                                    onClick={() => document.getElementById('chat-file-upload')?.click()}
+                                ></ButtonComponent>
+
+                                <div className="flex-1 bg-gray-50 rounded-2xl border border-gray-200 focus-within:border-indigo-400 focus-within:ring-1 focus-within:ring-indigo-400 transition-all overflow-hidden">
                                     <TextBoxComponent
-                                        placeholder="Message Magentrix Wizard..."
+                                        placeholder="Type your message here..."
                                         value={inputValue}
                                         input={(e: any) => setInputValue(e.value)}
-                                        cssClass="e-no-border" // Assuming we can remove border via class or need override
-                                        style={{ border: 'none', background: 'transparent', boxShadow: 'none' }}
+                                        cssClass="e-outline e-no-border"
+                                        multiline={true}
+                                        style={{
+                                            padding: '12px 16px',
+                                            border: 'none',
+                                            background: 'transparent',
+                                            boxShadow: 'none',
+                                            width: '100%',
+                                            fontSize: '14px'
+                                        }}
                                     />
                                 </div>
                                 <ButtonComponent
-                                    cssClass="e-primary e-round"
-                                    style={{ width: '40px', height: '40px', padding: 0 }}
+                                    cssClass="e-primary e-round shadow-sm"
+                                    style={{
+                                        width: '40px',
+                                        height: '40px',
+                                        minWidth: '40px',
+                                        padding: 0,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        backgroundColor: '#4f46e5'
+                                    }}
                                     iconCss="e-icons e-send"
                                     onClick={handleSend}
                                 ></ButtonComponent>
                             </div>
                             <div className="text-center mt-2">
-                                <p className="text-xs text-gray-400">AI can make mistakes. Please verify important information.</p>
+                                <p className="text-[10px] text-gray-400 font-medium">AI can make mistakes. Please verify important information.</p>
                             </div>
                         </div>
                     </div>
