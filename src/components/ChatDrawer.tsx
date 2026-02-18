@@ -93,11 +93,11 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
             >
                 {/* Unified Header */}
                 <div className="h-14 flex items-center justify-between px-4 border-b border-gray-100 bg-[#4f46e5] text-white shrink-0">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 w-24">
                         {/* Hamburger Menu (Only visible/relevant when minimized) */}
                         {!isMaximized && (
                             <button
-                                className="p-2 hover:bg-white/10 rounded-md transition-colors"
+                                className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors"
                                 onClick={toggleHistory}
                             >
                                 <span className="e-icons e-menu text-lg"></span>
@@ -106,7 +106,7 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
 
                         {/* Maximize Toggle */}
                         <button
-                            className="p-2 hover:bg-white/10 rounded-md transition-colors hover:scale-110"
+                            className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors hover:scale-110"
                             title={isMaximized ? "Restore" : "Maximize"}
                             onClick={toggleMaximize}
                         >
@@ -128,10 +128,12 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                         </button>
                     </div>
 
-                    <div className="font-bold tracking-tight truncate px-2">Magentrix AI Assistant</div>
+                    <div className="flex-1 text-center font-bold tracking-tight truncate px-2">
+                        Magentrix AI Assistant
+                    </div>
 
-                    <div className="flex items-center">
-                        <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-md transition-colors">
+                    <div className="flex items-center justify-end w-24">
+                        <button onClick={onClose} className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors">
                             <span className="e-icons e-close text-lg"></span>
                         </button>
                     </div>
