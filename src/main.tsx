@@ -13,6 +13,7 @@ import '@syncfusion/ej2-navigations/styles/tailwind.css';
 import '@syncfusion/ej2-react-lists/styles/tailwind.css';
 import '@syncfusion/ej2-popups/styles/tailwind.css';
 import '@syncfusion/ej2-react-grids/styles/tailwind.css';
+import '@syncfusion/ej2-interactive-chat/styles/tailwind.css';
 // Syncfusion License Registration
 import { registerLicense } from '@syncfusion/ej2-base';
 
