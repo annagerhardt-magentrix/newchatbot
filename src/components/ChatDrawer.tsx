@@ -8,10 +8,56 @@ interface ChatDrawerProps {
     onClose: () => void;
 }
 
+interface ChatFooterProps {
+    onSend: (text: string) => void;
+    onAttach: () => void;
+}
+
+const ChatFooter = ({ onSend, onAttach }: ChatFooterProps) => {
+    const [value, setValue] = useState('');
+
+    const handleSendClick = () => {
+        if (value.trim()) {
+            onSend(value);
+            setValue('');
+        }
+    };
+
+    return (
+        <div className="px-2 pb-4 pt-2 bg-white flex justify-center">
+            <div className="w-full max-w-[950px] e-input-group e-outline flex items-center pr-1 !rounded-2xl overflow-hidden border-gray-200 focus-within:border-[#4f46e5] focus-within:ring-1 focus-within:ring-[#4f46e5]/20 bg-gray-50/30 transition-all">
+                <input
+                    className="e-input pl-4 !border-none !shadow-none bg-transparent py-3"
+                    type="text"
+                    placeholder="Type your message here..."
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' && value.trim()) handleSendClick(); }}
+                />
+                <button
+                    className="e-input-group-icon e-icons e-attachment text-gray-400 hover:text-[#4f46e5] !border-none bg-transparent h-10 w-10 flex items-center justify-center cursor-pointer transition-colors"
+                    onClick={onAttach}
+                    type="button"
+                    title="Attach file"
+                />
+                <button
+                    className={`e-input-group-icon e-icons e-send !border-none bg-transparent h-10 w-10 flex items-center justify-center transition-all duration-300 ${value.trim()
+                        ? 'text-[#4f46e5] cursor-pointer scale-110 active:scale-95'
+                        : 'text-gray-200 cursor-not-allowed opacity-50'
+                        }`}
+                    onClick={handleSendClick}
+                    disabled={!value.trim()}
+                    type="button"
+                    title="Send message"
+                />
+            </div>
+        </div>
+    );
+};
+
 export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
     const [isMaximized, setIsMaximized] = useState(false);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-    const [inputValue, setInputValue] = useState('');
     const aiAssistRef = useRef<any>(null);
     const [prompts, setPrompts] = useState<any[]>([
         {
@@ -40,14 +86,9 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
 
     const toggleHistory = () => setIsHistoryOpen(!isHistoryOpen);
 
-    const handleSend = () => {
-        if (!inputValue.trim()) return;
-
-        const promptText = inputValue;
-        setInputValue('');
-
+    const handleSend = (text: string) => {
         const newPrompt = {
-            prompt: promptText,
+            prompt: text,
             response: "...",
             author: "Magentrix Wizard"
         };
@@ -108,34 +149,10 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
     };
 
     const footerTemplate = () => (
-        <div className="px-2 pb-4 pt-2 bg-white flex justify-center">
-            <div className="w-full max-w-[950px] e-input-group e-outline flex items-center pr-1 !rounded-2xl overflow-hidden border-gray-200 focus-within:border-[#4f46e5] focus-within:ring-1 focus-within:ring-[#4f46e5]/20 bg-gray-50/30 transition-all">
-                <input
-                    className="e-input pl-4 !border-none !shadow-none bg-transparent py-3"
-                    type="text"
-                    placeholder="Type your message here..."
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === 'Enter' && inputValue.trim()) handleSend(); }}
-                />
-                <button
-                    className="e-input-group-icon e-icons e-attachment text-gray-400 hover:text-[#4f46e5] !border-none bg-transparent h-10 w-10 flex items-center justify-center cursor-pointer transition-colors"
-                    onClick={() => fileInputRef.current?.click()}
-                    type="button"
-                    title="Attach file"
-                />
-                <button
-                    className={`e-input-group-icon e-icons e-send !border-none bg-transparent h-10 w-10 flex items-center justify-center transition-all duration-300 ${inputValue.trim()
-                        ? 'text-[#4f46e5] cursor-pointer scale-110 active:scale-95'
-                        : 'text-gray-200 cursor-not-allowed opacity-50'
-                        }`}
-                    onClick={() => { if (inputValue.trim()) handleSend(); }}
-                    disabled={!inputValue.trim()}
-                    type="button"
-                    title="Send message"
-                />
-            </div>
-        </div>
+        <ChatFooter
+            onSend={handleSend}
+            onAttach={() => fileInputRef.current?.click()}
+        />
     );
 
     const showHistorySideBySide = isMaximized;
