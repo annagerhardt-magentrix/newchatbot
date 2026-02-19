@@ -24,7 +24,7 @@ const ChatFooter = ({ onSend, onAttach }: ChatFooterProps) => {
     };
 
     return (
-        <div className="px-2 pb-1 pt-2 bg-white flex justify-center">
+        <div className="px-2 pb-1 pt-2 chat-footer-container flex justify-center">
             <div className="w-full max-w-[950px] e-input-group e-outline flex items-center pr-1 !rounded-2xl overflow-hidden border-gray-200 focus-within:border-[#4f46e5] focus-within:ring-1 focus-within:ring-[#4f46e5]/20 bg-gray-50/30 transition-all">
                 <input
                     className="e-input pl-4 !border-none !shadow-none bg-transparent py-3"
@@ -89,7 +89,7 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
     const handleSend = (text: string) => {
         const newPrompt = {
             prompt: text,
-            response: "...",
+            response: "shimmer-thinking",
             author: "Magentrix Wizard"
         };
 
@@ -154,6 +154,29 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
             onAttach={() => fileInputRef.current?.click()}
         />
     );
+
+    const promptItemTemplate = (props: any) => {
+        return (
+            <div className="chat-bubble user-bubble">
+                {props.prompt}
+            </div>
+        );
+    };
+
+    const responseItemTemplate = (props: any) => {
+        const isThinking = props.response === "shimmer-thinking" || props.response === "...";
+        return (
+            <div className="chat-bubble assistant-bubble">
+                {isThinking ? (
+                    <div className="flex items-center gap-2 py-1">
+                        <span className="thinking-shimmer"></span>
+                    </div>
+                ) : (
+                    props.response
+                )}
+            </div>
+        );
+    };
 
     const showHistorySideBySide = isMaximized;
     const showHistoryOverlay = !isMaximized && isHistoryOpen;
@@ -277,6 +300,8 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                                 promptSuggestions={promptSuggestions}
                                 prompts={prompts}
                                 footerTemplate={footerTemplate}
+                                promptItemTemplate={promptItemTemplate}
+                                responseItemTemplate={responseItemTemplate}
                                 height="100%"
                                 width="100%"
                                 className="animate-in fade-in zoom-in-95 duration-700 ease-[var(--ease-out-expo)]"

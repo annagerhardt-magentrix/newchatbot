@@ -68,6 +68,76 @@
     -webkit-mask-size: contain;
 }
 
+/* --- UI/UX PRO MAX CHAT PREMIUM STYLES --- */
+
+/* 1. Message Bubble Distinction & Aurora Effect */
+.e-aiassistview .e-views .e-content .e-list-parent .e-list-item {
+    background: transparent !important;
+    border: none !important;
+    padding: 12px 0 !important;
+}
+
+/* Common Bubble Style */
+.chat-bubble {
+    padding: 14px 18px;
+    max-width: 85%;
+    line-height: 1.6;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    position: relative;
+    transition: all 0.3s var(--ease-out-expo);
+}
+
+/* Assistant Bubble - Aurora / Soft Glass Effect */
+.assistant-bubble {
+    background: linear-gradient(135deg, rgba(249, 250, 251, 0.9), rgba(238, 242, 255, 0.9)) !important;
+    border: 1px solid rgba(79, 70, 229, 0.1) !important;
+    color: #1f2937;
+    border-radius: 4px 20px 20px 20px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+/* User Bubble - Minimalist */
+.user-bubble {
+    background: #4f46e5 !important;
+    color: white !important;
+    border-radius: 20px 20px 4px 20px !important;
+    margin-left: auto;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+/* 2. Floating Footer with Glassmorphism */
+.chat-footer-container {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-top: 1px solid rgba(243, 244, 246, 0.8) !important;
+    position: relative;
+    z-index: 10;
+}
+
+/* 3. Shimmering Thinking State */
+.thinking-shimmer {
+    height: 12px;
+    width: 60px;
+    background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 6px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
 /* Drawer Styling Overrides */
 #chat-drawer.e-sidebar,
 #chat-drawer.e-sidebar .e-content-animation,
@@ -111,7 +181,17 @@ body {
 
 /* AIAssistView Message Animation */
 .e-aiassistview .e-views .e-content .e-list-parent .e-list-item {
-    animation: slideInUp 0.5s var(--ease-out-expo) both;
+    animation: slideInUp 0.6s var(--ease-out-expo) both;
+}
+
+/* Force AIAssistView background to be cleaner */
+.e-aiassistview {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.e-aiassistview .e-views .e-content {
+    background-color: transparent !important;
 }
 
 @keyframes slideInUp {
