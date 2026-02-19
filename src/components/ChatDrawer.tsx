@@ -125,11 +125,11 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
     };
 
     const footerTemplate = () => (
-        <div className="px-6 py-4 bg-white">
-            <div className="flex items-center bg-white border border-gray-200 rounded-lg px-4 py-1.5 focus-within:border-[#4f46e5] focus-within:ring-1 focus-within:ring-indigo-100 transition-all">
+        <div className="px-5 pb-6 pt-2 bg-white">
+            <div className="flex items-center border border-gray-200 rounded-md px-3 py-1 bg-white focus-within:border-gray-300 transition-colors">
                 <div className="flex-1">
                     <TextBoxComponent
-                        placeholder="Type message..."
+                        placeholder="Type your message here..."
                         value={inputValue}
                         input={(e: any) => setInputValue(e.value)}
                         cssClass="e-no-border"
@@ -137,36 +137,28 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                         onKeyDown={(e: any) => { if (e.keyCode === 13) handleSend(); }}
                     />
                 </div>
-                <div className="flex items-center gap-3">
-                    {/* Emoji icon */}
-                    <button className="text-gray-400 hover:text-gray-600 transition-colors p-1">
-                        <span className="e-icons e-emoji text-lg"></span>
-                    </button>
-
-                    {/* Attachment Dropdown (Paperclip) */}
+                <div className="flex items-center gap-1 ml-2">
+                    {/* Paperclip Dropdown Icon */}
                     <div className="flex items-center">
                         <DropDownButtonComponent
                             items={dropdownItems}
                             iconCss="e-icons e-link"
-                            cssClass="e-flat e-caret-hide text-gray-400 hover:text-gray-600"
+                            cssClass="e-flat e-caret-hide text-gray-400 hover:text-gray-600 transition-colors"
                             select={onSelectUpload}
                             title="Attach file"
                             style={{ fontSize: '18px' }}
                         />
                     </div>
 
-                    {/* Send icon */}
+                    {/* Send Icon */}
                     <button
-                        className={`transition-colors p-1 ${inputValue.trim() ? 'text-[#4f46e5] hover:text-indigo-700' : 'text-gray-300'}`}
+                        className={`p-1.5 transition-colors ${inputValue.trim() ? 'text-[#4f46e5]' : 'text-gray-200 cursor-not-allowed'}`}
                         onClick={handleSend}
                         disabled={!inputValue.trim()}
                     >
                         <span className="e-icons e-send-1 text-xl"></span>
                     </button>
                 </div>
-            </div>
-            <div className="mt-2 flex justify-center">
-                <p className="text-[10px] text-gray-400">Magentrix AI Assistant can make mistakes. Please verify important info.</p>
             </div>
         </div>
     );
