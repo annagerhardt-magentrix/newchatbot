@@ -71,10 +71,15 @@
 /* --- UI/UX PRO MAX CHAT PREMIUM STYLES --- */
 
 /* 1. Message Bubble Distinction & Aurora Effect */
+.e-aiassistview .e-views .e-content .e-list-parent {
+    padding: 20px 16px !important;
+    /* Horizontal padding for shadow safe-zone */
+}
+
 .e-aiassistview .e-views .e-content .e-list-parent .e-list-item {
     background: transparent !important;
     border: none !important;
-    padding: 12px 0 !important;
+    padding: 8px 0 !important;
 }
 
 /* Common Bubble Style */
@@ -89,6 +94,11 @@
     word-break: break-word;
     overflow-wrap: break-word;
     white-space: pre-wrap;
+    cursor: pointer;
+}
+
+.chat-bubble:hover {
+    transform: translateY(-2px);
 }
 
 /* Assistant Bubble - Aurora / Soft Glass Effect */
@@ -100,6 +110,10 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
 }
 
+.assistant-bubble:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
 /* User Bubble - Minimalist */
 .user-bubble {
     background: #4f46e5 !important;
@@ -107,6 +121,10 @@
     border-radius: 20px 20px 4px 20px !important;
     margin-left: auto;
     box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+.user-bubble:hover {
+    box-shadow: 0 10px 25px rgba(79, 70, 229, 0.35);
 }
 
 /* 2. Floating Footer with Glassmorphism */
