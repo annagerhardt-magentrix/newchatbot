@@ -1,0 +1,21 @@
+# Syncfusion Dashboard Project Rules
+
+## Core Technologies
+- **UI Framework**: React with TypeScript.
+- **Component Library**: Always prioritize **Syncfusion (ej2-react-*)** components for all UI elements.
+- **Styling**: Use **Tailwind CSS v4** for layouts and custom micro-adjustments.
+- **Theming**: Follow the Tailwind theme defined in `src/index.css`.
+
+## Development Principles
+- **Component Isolation**: For interactive elements with frequent state updates (like text inputs), isolate the state into specialized sub-components (e.g., `ChatFooter`) to ensure performance and prevent focus loss issues during re-renders.
+- **UI Control**: If a Syncfusion component's property doesn't achieve the exact desired look, prefer using `template` props or manual HTML structures with Syncfusion CSS classes (e.g., `e-input-group`) for maximum design flexibility.
+- **Stability**: Never leave the project in a "White Screen" state. If a file is deleted or a compilation error occurs, revert or fix immediately.
+
+## Workflow & Git
+- **Atomic Commits**: Always perform a `git add .` and `git commit` after every successful UI change or feature implementation.
+- **Commit Messages**: Use descriptive, English commit messages summarizing the technical change (e.g., "Refactor: extract ChatFooter to stabilize input focus").
+- **Verification**: If possible, verify UI changes in the browser (localhost) before considering a task complete.
+
+## Design Guidelines
+- **Premium Aesthetics**: Maintain a modern, premium look with subtle shadows, rounded corners (prefer `!rounded-2xl`), and minimalist spacings.
+- **Compact Layouts**: In the chat components, prioritize space-saving designs with minimal bottom padding (e.g., `pb-1` or `pb-2`) to maximize content area.
