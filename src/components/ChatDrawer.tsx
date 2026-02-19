@@ -108,7 +108,7 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
     };
 
     const footerTemplate = () => (
-        <div className="px-3 pb-8 pt-2 bg-white flex justify-center">
+        <div className="px-2 pb-4 pt-2 bg-white flex justify-center">
             <div className="w-full max-w-[950px] e-input-group e-outline flex items-center pr-1 !rounded-2xl overflow-hidden border-gray-200 focus-within:border-[#4f46e5] focus-within:ring-1 focus-within:ring-[#4f46e5]/20 bg-gray-50/30 transition-all">
                 <input
                     className="e-input pl-4 !border-none !shadow-none bg-transparent py-3"
