@@ -3,7 +3,6 @@ import { AIAssistViewComponent } from '@syncfusion/ej2-react-interactive-chat';
 import type { PromptRequestEventArgs } from '@syncfusion/ej2-react-interactive-chat';
 import { DropDownButtonComponent } from '@syncfusion/ej2-react-splitbuttons';
 import type { ItemModel, MenuEventArgs } from '@syncfusion/ej2-react-splitbuttons';
-import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
 import { useState, useRef } from 'react';
 
@@ -47,7 +46,6 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
     const handleSend = () => {
         if (!inputValue.trim()) return;
 
-        // Use the same logic as promptRequest
         const promptText = inputValue;
         setInputValue('');
 
@@ -72,7 +70,6 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
     };
 
     const onPromptRequest = (args: PromptRequestEventArgs) => {
-        // This is still needed for suggestions or other library triggers
         const newPrompt = {
             prompt: args.prompt,
             response: "...",
@@ -128,21 +125,11 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
     };
 
     const footerTemplate = () => (
-        <div className="p-4 border-t border-gray-100 bg-white">
-            <div className="relative flex items-center gap-2 bg-gray-50 p-2 rounded-2xl border border-gray-200 focus-within:border-[#4f46e5] focus-within:ring-4 focus-within:ring-indigo-100 transition-all shadow-inner">
-                <div className="flex items-center pl-1">
-                    <DropDownButtonComponent
-                        items={dropdownItems}
-                        iconCss="e-icons e-plus"
-                        cssClass="e-flat e-caret-hide e-primary"
-                        select={onSelectUpload}
-                        title="Attach file"
-                        style={{ fontSize: '18px' }}
-                    />
-                </div>
+        <div className="px-6 py-4 bg-white">
+            <div className="flex items-center bg-white border border-gray-200 rounded-lg px-4 py-1.5 focus-within:border-[#4f46e5] focus-within:ring-1 focus-within:ring-indigo-100 transition-all">
                 <div className="flex-1">
                     <TextBoxComponent
-                        placeholder="Type your message here..."
+                        placeholder="Type message..."
                         value={inputValue}
                         input={(e: any) => setInputValue(e.value)}
                         cssClass="e-no-border"
@@ -150,15 +137,35 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                         onKeyDown={(e: any) => { if (e.keyCode === 13) handleSend(); }}
                     />
                 </div>
-                <ButtonComponent
-                    iconCss="e-icons e-send"
-                    cssClass="e-primary e-round shadow-md"
-                    style={{ width: '40px', height: '40px', padding: 0 }}
-                    onClick={handleSend}
-                    disabled={!inputValue.trim()}
-                />
+                <div className="flex items-center gap-3">
+                    {/* Emoji icon */}
+                    <button className="text-gray-400 hover:text-gray-600 transition-colors p-1">
+                        <span className="e-icons e-emoji text-lg"></span>
+                    </button>
+
+                    {/* Attachment Dropdown (Paperclip) */}
+                    <div className="flex items-center">
+                        <DropDownButtonComponent
+                            items={dropdownItems}
+                            iconCss="e-icons e-link"
+                            cssClass="e-flat e-caret-hide text-gray-400 hover:text-gray-600"
+                            select={onSelectUpload}
+                            title="Attach file"
+                            style={{ fontSize: '18px' }}
+                        />
+                    </div>
+
+                    {/* Send icon */}
+                    <button
+                        className={`transition-colors p-1 ${inputValue.trim() ? 'text-[#4f46e5] hover:text-indigo-700' : 'text-gray-300'}`}
+                        onClick={handleSend}
+                        disabled={!inputValue.trim()}
+                    >
+                        <span className="e-icons e-send-1 text-xl"></span>
+                    </button>
+                </div>
             </div>
-            <div className="text-center mt-2 px-10">
+            <div className="mt-2 flex justify-center">
                 <p className="text-[10px] text-gray-400">Magentrix AI Assistant can make mistakes. Please verify important info.</p>
             </div>
         </div>
