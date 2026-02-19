@@ -1,7 +1,11 @@
 import { SidebarComponent } from '@syncfusion/ej2-react-navigations';
 import { AIAssistViewComponent } from '@syncfusion/ej2-react-interactive-chat';
 import type { PromptRequestEventArgs } from '@syncfusion/ej2-react-interactive-chat';
-import { useState } from 'react';
+import { DropDownButtonComponent } from '@syncfusion/ej2-react-splitbuttons';
+import type { ItemModel, MenuEventArgs } from '@syncfusion/ej2-react-splitbuttons';
+import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
+import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
+import { useState, useRef } from 'react';
 
 interface ChatDrawerProps {
     isOpen: boolean;
@@ -11,6 +15,8 @@ interface ChatDrawerProps {
 export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
     const [isMaximized, setIsMaximized] = useState(false);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+    const aiAssistRef = useRef<any>(null);
     const [prompts, setPrompts] = useState<any[]>([
         {
             prompt: "Can you help me log my work for today?",
@@ -18,6 +24,9 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
             author: "Magentrix Wizard"
         }
     ]);
+
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [uploadType, setUploadType] = useState<string>('');
 
     const historyData = [
         { text: 'Logging Work Details', id: '1' },
@@ -29,15 +38,41 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
     const toggleMaximize = () => {
         const newMax = !isMaximized;
         setIsMaximized(newMax);
-        // Automatically close history toggle when minimizing, 
-        // but keep it open (side-by-side) when maximizing
         if (newMax) setIsHistoryOpen(true);
         else setIsHistoryOpen(false);
     };
 
     const toggleHistory = () => setIsHistoryOpen(!isHistoryOpen);
 
+    const handleSend = () => {
+        if (!inputValue.trim()) return;
+
+        // Use the same logic as promptRequest
+        const promptText = inputValue;
+        setInputValue('');
+
+        const newPrompt = {
+            prompt: promptText,
+            response: "...",
+            author: "Magentrix Wizard"
+        };
+
+        setPrompts(prev => [...prev, newPrompt]);
+
+        setTimeout(() => {
+            setPrompts(prev => {
+                const updated = [...prev];
+                const lastItem = updated[updated.length - 1];
+                if (lastItem) {
+                    lastItem.response = "I've processed your request. Is there anything else you'd like to do with your work log?";
+                }
+                return [...updated];
+            });
+        }, 2000);
+    };
+
     const onPromptRequest = (args: PromptRequestEventArgs) => {
+        // This is still needed for suggestions or other library triggers
         const newPrompt = {
             prompt: args.prompt,
             response: "...",
@@ -64,9 +99,71 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
         "Search the wiki for 'API'"
     ];
 
-    // Sidebar inside logic: 
-    // If maximized, history is fixed on left.
-    // If minimized, history is an overlay or slides in based on isHistoryOpen.
+    const dropdownItems: ItemModel[] = [
+        { text: 'Image', iconCss: 'e-icons e-image' },
+        { text: 'PDF Document', iconCss: 'e-icons e-pdf' },
+        { text: 'Spreadsheet', iconCss: 'e-icons e-sheet' }
+    ];
+
+    const onSelectUpload = (args: MenuEventArgs) => {
+        setUploadType(args.item.text || '');
+        if (fileInputRef.current) {
+            if (args.item.text === 'Image') fileInputRef.current.accept = 'image/*';
+            else if (args.item.text === 'PDF Document') fileInputRef.current.accept = '.pdf';
+            else if (args.item.text === 'Spreadsheet') fileInputRef.current.accept = '.xlsx,.xls,.csv';
+            fileInputRef.current.click();
+        }
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const filePrompt = {
+                prompt: `Attached ${uploadType}: ${file.name}`,
+                response: `I've received your ${uploadType.toLowerCase()}. I'm analyzing the content now...`,
+                author: "Magentrix Wizard"
+            };
+            setPrompts(prev => [...prev, filePrompt]);
+        }
+    };
+
+    const footerTemplate = () => (
+        <div className="p-4 border-t border-gray-100 bg-white">
+            <div className="relative flex items-center gap-2 bg-gray-50 p-2 rounded-2xl border border-gray-200 focus-within:border-[#4f46e5] focus-within:ring-4 focus-within:ring-indigo-100 transition-all shadow-inner">
+                <div className="flex items-center pl-1">
+                    <DropDownButtonComponent
+                        items={dropdownItems}
+                        iconCss="e-icons e-plus"
+                        cssClass="e-flat e-caret-hide e-primary"
+                        select={onSelectUpload}
+                        title="Attach file"
+                        style={{ fontSize: '18px' }}
+                    />
+                </div>
+                <div className="flex-1">
+                    <TextBoxComponent
+                        placeholder="Type your message here..."
+                        value={inputValue}
+                        input={(e: any) => setInputValue(e.value)}
+                        cssClass="e-no-border"
+                        style={{ border: 'none', background: 'transparent', boxShadow: 'none' }}
+                        onKeyDown={(e: any) => { if (e.keyCode === 13) handleSend(); }}
+                    />
+                </div>
+                <ButtonComponent
+                    iconCss="e-icons e-send"
+                    cssClass="e-primary e-round shadow-md"
+                    style={{ width: '40px', height: '40px', padding: 0 }}
+                    onClick={handleSend}
+                    disabled={!inputValue.trim()}
+                />
+            </div>
+            <div className="text-center mt-2 px-10">
+                <p className="text-[10px] text-gray-400">Magentrix AI Assistant can make mistakes. Please verify important info.</p>
+            </div>
+        </div>
+    );
+
     const showHistorySideBySide = isMaximized;
     const showHistoryOverlay = !isMaximized && isHistoryOpen;
 
@@ -91,10 +188,15 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                     transition: 'border-radius 0.4s ease'
                 }}
             >
-                {/* Unified Header */}
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    onChange={handleFileChange}
+                />
+
                 <div className="h-14 flex items-center justify-between px-4 border-b border-gray-100 bg-[#4f46e5] text-white shrink-0">
                     <div className="flex items-center gap-1 w-24">
-                        {/* Hamburger Menu (Only visible/relevant when minimized) */}
                         {!isMaximized && (
                             <button
                                 className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors"
@@ -104,7 +206,6 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                             </button>
                         )}
 
-                        {/* Maximize Toggle */}
                         <button
                             className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors hover:scale-110"
                             title={isMaximized ? "Restore" : "Maximize"}
@@ -139,10 +240,7 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                     </div>
                 </div>
 
-                {/* Main Content Area: History + Chat */}
                 <div className="flex-1 flex overflow-hidden relative">
-
-                    {/* History Sidebar Panel */}
                     <div
                         className={`bg-gray-50 border-r border-gray-100 flex flex-col transition-all duration-300 ease-in-out z-20 
                             ${showHistorySideBySide ? 'w-96 relative' : showHistoryOverlay ? 'w-64 absolute inset-y-0 left-0 shadow-xl' : 'w-0 overflow-hidden'}`}
@@ -169,9 +267,7 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                         </div>
                     </div>
 
-                    {/* Chat Area */}
                     <div className="flex-1 overflow-hidden flex flex-col items-center bg-white relative">
-                        {/* Overlay backdrop when history is open in minimized mode */}
                         {showHistoryOverlay && (
                             <div
                                 className="absolute inset-0 bg-black/20 z-10 animate-in fade-in duration-300"
@@ -185,10 +281,11 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                         >
                             <AIAssistViewComponent
                                 id="aiAssistView"
+                                ref={aiAssistRef}
                                 promptRequest={onPromptRequest}
                                 promptSuggestions={promptSuggestions}
                                 prompts={prompts}
-                                promptPlaceholder="Type your message here..."
+                                footerTemplate={footerTemplate}
                                 height="100%"
                                 width="100%"
                             >

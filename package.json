@@ -18,6 +18,8 @@
     "@syncfusion/ej2-react-interactive-chat": "^32.2.5",
     "@syncfusion/ej2-react-lists": "^32.2.3",
     "@syncfusion/ej2-react-navigations": "^32.2.3",
+    "@syncfusion/ej2-react-splitbuttons": "^32.2.3",
+    "@syncfusion/ej2-splitbuttons": "^32.2.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
