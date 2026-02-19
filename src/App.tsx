@@ -19,7 +19,7 @@ function App() {
           <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 900 }}>
             <FabComponent
               iconCss="e-icons e-ai-sparkle"
-              cssClass="e-primary e-round shadow-2xl"
+              cssClass="e-primary e-round shadow-2xl hover-lift transition-all"
               style={{ borderRadius: '50%', width: '56px', height: '56px' }}
               onClick={() => setIsChatOpen(true)}
             />

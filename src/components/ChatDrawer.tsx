@@ -190,7 +190,7 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                     <div className="flex items-center gap-1 w-24">
                         {!isMaximized && (
                             <button
-                                className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors"
+                                className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-md transition-all active:scale-90"
                                 onClick={toggleHistory}
                             >
                                 <span className="e-icons e-menu text-lg"></span>
@@ -198,7 +198,7 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                         )}
 
                         <button
-                            className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors hover:scale-110"
+                            className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-md transition-all hover:scale-110 active:scale-90"
                             title={isMaximized ? "Restore" : "Maximize"}
                             onClick={toggleMaximize}
                         >
@@ -225,7 +225,7 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                     </div>
 
                     <div className="flex items-center justify-end w-24">
-                        <button onClick={onClose} className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors">
+                        <button onClick={onClose} className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-md transition-all active:scale-90">
                             <span className="e-icons e-close text-lg"></span>
                         </button>
                     </div>
@@ -233,11 +233,11 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
 
                 <div className="flex-1 flex overflow-hidden relative">
                     <div
-                        className={`bg-gray-50 border-r border-gray-100 flex flex-col transition-all duration-300 ease-in-out z-20 
+                        className={`bg-gray-50 border-r border-gray-100 flex flex-col transition-all duration-500 ease-[var(--ease-out-expo)] z-20 
                             ${showHistorySideBySide ? 'w-96 relative' : showHistoryOverlay ? 'w-64 absolute inset-y-0 left-0 shadow-xl' : 'w-0 overflow-hidden'}`}
                     >
                         <div className="p-4 shrink-0">
-                            <button className="w-full bg-white border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all text-[#4f46e5] font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 group text-sm">
+                            <button className="w-full bg-white border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all active:scale-95 text-[#4f46e5] font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 group text-sm">
                                 <span className="e-icons e-plus text-lg group-hover:scale-110 transition-transform"></span>
                                 New Chat
                             </button>
@@ -279,6 +279,7 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                                 footerTemplate={footerTemplate}
                                 height="100%"
                                 width="100%"
+                                className="animate-in fade-in zoom-in-95 duration-700 ease-[var(--ease-out-expo)]"
                             >
                             </AIAssistViewComponent>
                         </div>
