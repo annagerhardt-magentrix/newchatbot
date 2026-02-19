@@ -1,4 +1,5 @@
 import { Sidebar } from './components/Sidebar';
+import { Header } from './components/Header';
 import { ChatDrawer } from './components/ChatDrawer';
 import { Dashboard } from './pages/Dashboard';
 import { FabComponent } from '@syncfusion/ej2-react-buttons';
@@ -9,10 +10,13 @@ function App() {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
-    <div className="flex w-full h-screen bg-background text-on-surface">
+    <div className="flex w-full h-screen bg-background text-on-surface overflow-hidden">
       <Sidebar />
-      <div className="flex-1 overflow-auto main-content relative">
-        <Dashboard />
+      <div className="flex-1 flex flex-col min-w-0 main-content relative overflow-hidden">
+        <Header />
+        <div className="flex-1 overflow-auto bg-gray-50/50">
+          <Dashboard />
+        </div>
 
         {/* Floating Action Button for Chat - Hide when drawer is open */}
         {!isChatOpen && (
