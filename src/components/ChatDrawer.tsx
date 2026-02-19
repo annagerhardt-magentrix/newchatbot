@@ -124,9 +124,10 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
         }
     };
 
+    // Exactly matching the simple border-box aesthetic of the screenshot
     const footerTemplate = () => (
-        <div className="px-5 pb-6 pt-2 bg-white">
-            <div className="flex items-center border border-gray-200 rounded-md px-3 py-1 bg-white focus-within:border-gray-300 transition-colors">
+        <div className="px-5 pb-8 pt-2 bg-white flex flex-col items-center">
+            <div className="w-full border border-gray-200 rounded-lg flex items-center px-3 py-1 bg-white hover:border-gray-300 transition-colors">
                 <div className="flex-1">
                     <TextBoxComponent
                         placeholder="Type your message here..."
@@ -138,19 +139,16 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                     />
                 </div>
                 <div className="flex items-center gap-1 ml-2">
-                    {/* Paperclip Dropdown Icon */}
-                    <div className="flex items-center">
-                        <DropDownButtonComponent
-                            items={dropdownItems}
-                            iconCss="e-icons e-link"
-                            cssClass="e-flat e-caret-hide text-gray-400 hover:text-gray-600 transition-colors"
-                            select={onSelectUpload}
-                            title="Attach file"
-                            style={{ fontSize: '18px' }}
-                        />
-                    </div>
+                    {/* Paperclip Dropdown */}
+                    <DropDownButtonComponent
+                        items={dropdownItems}
+                        iconCss="e-icons e-link"
+                        cssClass="e-flat e-caret-hide text-gray-300 hover:text-indigo-600 transition-colors"
+                        select={onSelectUpload}
+                        title="Attach file"
+                    />
 
-                    {/* Send Icon */}
+                    {/* Send Button */}
                     <button
                         className={`p-1.5 transition-colors ${inputValue.trim() ? 'text-[#4f46e5]' : 'text-gray-200 cursor-not-allowed'}`}
                         onClick={handleSend}
