@@ -1,8 +1,9 @@
 import { SidebarComponent } from '@syncfusion/ej2-react-navigations';
 import { AIAssistViewComponent } from '@syncfusion/ej2-react-interactive-chat';
-import type { PromptRequestEventArgs, ToolbarItemModel } from '@syncfusion/ej2-react-interactive-chat';
+import type { PromptRequestEventArgs } from '@syncfusion/ej2-react-interactive-chat';
 import { DropDownButtonComponent } from '@syncfusion/ej2-react-splitbuttons';
 import type { ItemModel, MenuEventArgs } from '@syncfusion/ej2-react-splitbuttons';
+import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
 import { useState, useRef } from 'react';
 
 interface ChatDrawerProps {
@@ -13,6 +14,8 @@ interface ChatDrawerProps {
 export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
     const [isMaximized, setIsMaximized] = useState(false);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+    const aiAssistRef = useRef<any>(null);
     const [prompts, setPrompts] = useState<any[]>([
         {
             prompt: "Can you help me log my work for today?",
@@ -39,6 +42,32 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
     };
 
     const toggleHistory = () => setIsHistoryOpen(!isHistoryOpen);
+
+    const handleSend = () => {
+        if (!inputValue.trim()) return;
+
+        const promptText = inputValue;
+        setInputValue('');
+
+        const newPrompt = {
+            prompt: promptText,
+            response: "...",
+            author: "Magentrix Wizard"
+        };
+
+        setPrompts(prev => [...prev, newPrompt]);
+
+        setTimeout(() => {
+            setPrompts(prev => {
+                const updated = [...prev];
+                const lastItem = updated[updated.length - 1];
+                if (lastItem) {
+                    lastItem.response = "I've processed your request. Is there anything else you'd like to do with your work log?";
+                }
+                return [...updated];
+            });
+        }, 2000);
+    };
 
     const onPromptRequest = (args: PromptRequestEventArgs) => {
         const newPrompt = {
@@ -67,40 +96,21 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
         "Search the wiki for 'API'"
     ];
 
-    // Using Syncfusion's native footer toolbar for pixel-perfect standard look
-    const footerItems: ToolbarItemModel[] = [
-        {
-            align: 'Right',
-            template: () => {
-                const items: ItemModel[] = [
-                    { text: 'Image', iconCss: 'e-icons e-image' },
-                    { text: 'PDF Document', iconCss: 'e-icons e-pdf' },
-                    { text: 'Spreadsheet', iconCss: 'e-icons e-sheet' }
-                ];
-
-                const onSelect = (args: MenuEventArgs) => {
-                    setUploadType(args.item.text || '');
-                    if (fileInputRef.current) {
-                        if (args.item.text === 'Image') fileInputRef.current.accept = 'image/*';
-                        else if (args.item.text === 'PDF Document') fileInputRef.current.accept = '.pdf';
-                        else if (args.item.text === 'Spreadsheet') fileInputRef.current.accept = '.xlsx,.xls,.csv';
-                        fileInputRef.current.click();
-                    }
-                };
-
-                return (
-                    <div className="flex items-center pr-2">
-                        <DropDownButtonComponent
-                            items={items}
-                            iconCss="e-icons e-link"
-                            cssClass="e-flat e-caret-hide text-gray-400"
-                            select={onSelect}
-                        />
-                    </div>
-                );
-            }
-        }
+    const dropdownItems: ItemModel[] = [
+        { text: 'Image', iconCss: 'e-icons e-image' },
+        { text: 'PDF Document', iconCss: 'e-icons e-pdf' },
+        { text: 'Spreadsheet', iconCss: 'e-icons e-sheet' }
     ];
+
+    const onSelectUpload = (args: MenuEventArgs) => {
+        setUploadType(args.item.text || '');
+        if (fileInputRef.current) {
+            if (args.item.text === 'Image') fileInputRef.current.accept = 'image/*';
+            else if (args.item.text === 'PDF Document') fileInputRef.current.accept = '.pdf';
+            else if (args.item.text === 'Spreadsheet') fileInputRef.current.accept = '.xlsx,.xls,.csv';
+            fileInputRef.current.click();
+        }
+    };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -113,6 +123,37 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
             setPrompts(prev => [...prev, filePrompt]);
         }
     };
+
+    // Usando o componente TextBox do Syncfusion com botões integrados para o look pixel-perfect
+    const footerTemplate = () => (
+        <div className="px-5 pb-8 pt-2 bg-white">
+            <TextBoxComponent
+                placeholder="Type your message here..."
+                value={inputValue}
+                input={(e: any) => setInputValue(e.value)}
+                cssClass="e-outline e-ai-input"
+                onKeyDown={(e: any) => { if (e.keyCode === 13) handleSend(); }}
+                buttons={[
+                    {
+                        template: (
+                            <div className="flex items-center h-full">
+                                <DropDownButtonComponent
+                                    items={dropdownItems}
+                                    iconCss="e-icons e-link"
+                                    cssClass="e-flat e-caret-hide text-gray-400 hover:text-[#4f46e5]"
+                                    select={onSelectUpload}
+                                />
+                            </div>
+                        )
+                    },
+                    {
+                        iconCss: `e-icons e-send-1 ${inputValue.trim() ? 'text-[#4f46e5]' : 'text-[#dee2e6]'}`,
+                        click: handleSend
+                    }
+                ]}
+            />
+        </div>
+    );
 
     const showHistorySideBySide = isMaximized;
     const showHistoryOverlay = !isMaximized && isHistoryOpen;
@@ -231,13 +272,13 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
                         >
                             <AIAssistViewComponent
                                 id="aiAssistView"
+                                ref={aiAssistRef}
                                 promptRequest={onPromptRequest}
                                 promptSuggestions={promptSuggestions}
                                 prompts={prompts}
-                                promptPlaceholder="Type your message here..."
+                                footerTemplate={footerTemplate}
                                 height="100%"
                                 width="100%"
-                                footerToolbarSettings={{ items: footerItems }}
                             >
                             </AIAssistViewComponent>
                         </div>
