@@ -124,34 +124,35 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
         }
     };
 
-    // Usando o componente TextBox do Syncfusion com botões integrados para o look pixel-perfect
     const footerTemplate = () => (
-        <div className="px-5 pb-8 pt-2 bg-white">
-            <TextBoxComponent
-                placeholder="Type your message here..."
-                value={inputValue}
-                input={(e: any) => setInputValue(e.value)}
-                cssClass="e-outline e-ai-input"
-                onKeyDown={(e: any) => { if (e.keyCode === 13) handleSend(); }}
-                buttons={[
-                    {
-                        template: (
-                            <div className="flex items-center h-full">
-                                <DropDownButtonComponent
-                                    items={dropdownItems}
-                                    iconCss="e-icons e-link"
-                                    cssClass="e-flat e-caret-hide text-gray-400 hover:text-[#4f46e5]"
-                                    select={onSelectUpload}
-                                />
-                            </div>
-                        )
-                    },
-                    {
-                        iconCss: `e-icons e-send-1 ${inputValue.trim() ? 'text-[#4f46e5]' : 'text-[#dee2e6]'}`,
-                        click: handleSend
-                    }
-                ]}
-            />
+        <div className="px-5 pb-10 pt-2 bg-white flex flex-col items-center">
+            <div className="w-full">
+                <TextBoxComponent
+                    placeholder="Type your message here..."
+                    value={inputValue}
+                    input={(e: any) => setInputValue(e.value)}
+                    cssClass="e-outline e-input-group"
+                    onKeyDown={(e: any) => { if (e.keyCode === 13) handleSend(); }}
+                    buttons={[
+                        {
+                            template: (
+                                <div className="flex items-center px-1">
+                                    <DropDownButtonComponent
+                                        items={dropdownItems}
+                                        iconCss="e-icons e-link"
+                                        cssClass="e-flat e-caret-hide text-gray-400"
+                                        select={onSelectUpload}
+                                    />
+                                </div>
+                            )
+                        },
+                        {
+                            iconCss: `e-icons e-send ${inputValue.trim() ? 'text-[#4f46e5]' : 'text-gray-200'}`,
+                            click: handleSend
+                        }
+                    ]}
+                />
+            </div>
         </div>
     );
 
