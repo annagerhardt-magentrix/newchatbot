@@ -124,33 +124,33 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
         }
     };
 
-    // Exactly matching the simple border-box aesthetic of the screenshot
+    // This is the version that puts icons INSIDE the same rounded container, no nested borders.
     const footerTemplate = () => (
-        <div className="px-5 pb-8 pt-2 bg-white flex flex-col items-center">
-            <div className="w-full border border-gray-200 rounded-lg flex items-center px-3 py-1 bg-white hover:border-gray-300 transition-colors">
+        <div className="px-5 pb-8 pt-2 bg-white">
+            <div className="flex items-center bg-white border border-gray-200 rounded-lg px-3 py-1.5 focus-within:border-[#4f46e5] focus-within:ring-1 focus-within:ring-indigo-100 transition-all">
                 <div className="flex-1">
-                    <TextBoxComponent
+                    <input
+                        type="text"
                         placeholder="Type your message here..."
                         value={inputValue}
-                        input={(e: any) => setInputValue(e.value)}
-                        cssClass="e-no-border"
-                        style={{ border: 'none', background: 'transparent', boxShadow: 'none' }}
-                        onKeyDown={(e: any) => { if (e.keyCode === 13) handleSend(); }}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter') handleSend(); }}
+                        className="w-full bg-transparent border-none outline-none text-sm px-1 py-1 text-gray-700 placeholder:text-gray-400"
                     />
                 </div>
-                <div className="flex items-center gap-1 ml-2">
-                    {/* Paperclip Dropdown */}
-                    <DropDownButtonComponent
-                        items={dropdownItems}
-                        iconCss="e-icons e-link"
-                        cssClass="e-flat e-caret-hide text-gray-300 hover:text-indigo-600 transition-colors"
-                        select={onSelectUpload}
-                        title="Attach file"
-                    />
-
-                    {/* Send Button */}
+                <div className="flex items-center gap-1 ml-2 shrink-0">
+                    <div className="flex items-center">
+                        <DropDownButtonComponent
+                            items={dropdownItems}
+                            iconCss="e-icons e-link"
+                            cssClass="e-flat e-caret-hide text-gray-400 hover:text-[#4f46e5] transition-colors"
+                            select={onSelectUpload}
+                            title="Attach file"
+                            style={{ fontSize: '18px' }}
+                        />
+                    </div>
                     <button
-                        className={`p-1.5 transition-colors ${inputValue.trim() ? 'text-[#4f46e5]' : 'text-gray-200 cursor-not-allowed'}`}
+                        className={`p-1.5 transition-all duration-200 ${inputValue.trim() ? 'text-[#4f46e5] scale-110' : 'text-gray-200 cursor-not-allowed'}`}
                         onClick={handleSend}
                         disabled={!inputValue.trim()}
                     >
