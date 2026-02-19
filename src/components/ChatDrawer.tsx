@@ -1,9 +1,6 @@
 import { SidebarComponent } from '@syncfusion/ej2-react-navigations';
 import { AIAssistViewComponent } from '@syncfusion/ej2-react-interactive-chat';
 import type { PromptRequestEventArgs } from '@syncfusion/ej2-react-interactive-chat';
-import { DropDownButtonComponent } from '@syncfusion/ej2-react-splitbuttons';
-import type { ItemModel, MenuEventArgs } from '@syncfusion/ej2-react-splitbuttons';
-import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
 import { useState, useRef } from 'react';
 
 interface ChatDrawerProps {
@@ -25,7 +22,7 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
     ]);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [uploadType, setUploadType] = useState<string>('');
+
 
     const historyData = [
         { text: 'Logging Work Details', id: '1' },
@@ -96,28 +93,14 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
         "Search the wiki for 'API'"
     ];
 
-    const dropdownItems: ItemModel[] = [
-        { text: 'Image', iconCss: 'e-icons e-image' },
-        { text: 'PDF Document', iconCss: 'e-icons e-pdf' },
-        { text: 'Spreadsheet', iconCss: 'e-icons e-sheet' }
-    ];
 
-    const onSelectUpload = (args: MenuEventArgs) => {
-        setUploadType(args.item.text || '');
-        if (fileInputRef.current) {
-            if (args.item.text === 'Image') fileInputRef.current.accept = 'image/*';
-            else if (args.item.text === 'PDF Document') fileInputRef.current.accept = '.pdf';
-            else if (args.item.text === 'Spreadsheet') fileInputRef.current.accept = '.xlsx,.xls,.csv';
-            fileInputRef.current.click();
-        }
-    };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
             const filePrompt = {
-                prompt: `Attached ${uploadType}: ${file.name}`,
-                response: `I've received your ${uploadType.toLowerCase()}. I'm analyzing the content now...`,
+                prompt: `Attached file: ${file.name}`,
+                response: `I've received your file. I'm analyzing the content now...`,
                 author: "Magentrix Wizard"
             };
             setPrompts(prev => [...prev, filePrompt]);
@@ -125,32 +108,31 @@ export const ChatDrawer = ({ isOpen, onClose }: ChatDrawerProps) => {
     };
 
     const footerTemplate = () => (
-        <div className="px-5 pb-10 pt-2 bg-white flex flex-col items-center">
-            <div className="w-full">
-                <TextBoxComponent
+        <div className="px-3 pb-8 pt-2 bg-white flex justify-center">
+            <div className="w-full max-w-[950px] e-input-group e-outline flex items-center pr-1 !rounded-2xl overflow-hidden border-gray-200 focus-within:border-[#4f46e5] focus-within:ring-1 focus-within:ring-[#4f46e5]/20 bg-gray-50/30 transition-all">
+                <input
+                    className="e-input pl-4 !border-none !shadow-none bg-transparent py-3"
+                    type="text"
                     placeholder="Type your message here..."
                     value={inputValue}
-                    input={(e: any) => setInputValue(e.value)}
-                    cssClass="e-outline e-input-group"
-                    onKeyDown={(e: any) => { if (e.keyCode === 13) handleSend(); }}
-                    buttons={[
-                        {
-                            template: (
-                                <div className="flex items-center px-1">
-                                    <DropDownButtonComponent
-                                        items={dropdownItems}
-                                        iconCss="e-icons e-link"
-                                        cssClass="e-flat e-caret-hide text-gray-400"
-                                        select={onSelectUpload}
-                                    />
-                                </div>
-                            )
-                        },
-                        {
-                            iconCss: `e-icons e-send ${inputValue.trim() ? 'text-[#4f46e5]' : 'text-gray-200'}`,
-                            click: handleSend
-                        }
-                    ]}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' && inputValue.trim()) handleSend(); }}
+                />
+                <button
+                    className="e-input-group-icon e-icons e-attachment text-gray-400 hover:text-[#4f46e5] !border-none bg-transparent h-10 w-10 flex items-center justify-center cursor-pointer transition-colors"
+                    onClick={() => fileInputRef.current?.click()}
+                    type="button"
+                    title="Attach file"
+                />
+                <button
+                    className={`e-input-group-icon e-icons e-send !border-none bg-transparent h-10 w-10 flex items-center justify-center transition-all duration-300 ${inputValue.trim()
+                        ? 'text-[#4f46e5] cursor-pointer scale-110 active:scale-95'
+                        : 'text-gray-200 cursor-not-allowed opacity-50'
+                        }`}
+                    onClick={() => { if (inputValue.trim()) handleSend(); }}
+                    disabled={!inputValue.trim()}
+                    type="button"
+                    title="Send message"
                 />
             </div>
         </div>
